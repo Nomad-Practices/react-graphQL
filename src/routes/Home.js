@@ -46,11 +46,14 @@ const Movies = styled.div`
   top: -50px;
 `
 
+// 여기서 apollo한테 client 단에서 추가되는 필드임을 알려주기 위해서는 @client를 붙여야 한다.
+// 왜냐하면 서버에서는 movies라는 query에 대한 응답필드로 isLiked가 없기 때문이다
 const GET_MOVIES = gql`
-  query {
+  query movies {
     movies {
       id
       medium_cover_image
+      isLiked @client
     }
   }
 `
@@ -68,7 +71,12 @@ function Home() {
       {data?.movies && (
         <Movies>
           {data.movies.map((m) => (
-            <Movie key={m.id} id={m.id} bg={m.medium_cover_image} />
+            <Movie
+              key={m.id}
+              id={m.id}
+              bg={m.medium_cover_image}
+              isLiked={m.isLiked}
+            />
           ))}
         </Movies>
       )}

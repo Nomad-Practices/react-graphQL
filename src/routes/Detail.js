@@ -48,11 +48,13 @@ const Poster = styled.div`
 const GET_MOVIE = gql`
   query getMovie($id: Int!) {
     movie(id: $id) {
+      id
       title
       medium_cover_image
       language
       rating
       description_intro
+      isLiked @client
     }
     suggestions(id: $id) {
       id
@@ -80,7 +82,11 @@ function Detail() {
           // Vue도 그렇겠지만 아직 data가 undefined인데 rendering한다면 type error가 발생하니
           // 반드시 optional chaining을 통해 해당 데이터가 있는 경우에만 rendering, re-rendering되도록 구현해야 한다.
         }
-        <Title>{loading ? 'Loading...' : data?.movie?.title}</Title>
+        <Title>
+          {loading
+            ? 'Loading...'
+            : `${data?.movie?.title} ${data?.movie?.isLiked ? '😍' : '🤔'}`}
+        </Title>
         <Subtitle>
           {data?.movie?.language} · {data?.movie?.rating}
         </Subtitle>
