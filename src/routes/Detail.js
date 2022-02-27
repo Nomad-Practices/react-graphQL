@@ -54,6 +54,10 @@ const GET_MOVIE = gql`
       rating
       description_intro
     }
+    suggestions(id: $id) {
+      id
+      medium_cover_image
+    }
   }
 `
 
@@ -70,21 +74,19 @@ function Detail() {
   return (
     <Container>
       <Column>
-        <Title>{loading ? 'Loading...' : data.movie.title}</Title>
-        {!loading && data.movie && (
+        {
           // 여러 개의 컴포넌트들을 굳이 html element로 wrapping하지 않을거면 fragment(<></>)를 사용하면 된다
           // Vue에서 컴포넌트 template 내부에서 <template></template>과 동일한 기능을 한다.
-          <>
-            <Subtitle>
-              {data.movie.language} · {data.movie.rating}
-            </Subtitle>
-            <Description>{data.movie.description_intro}</Description>
-          </>
-        )}
+          // Vue도 그렇겠지만 아직 data가 undefined인데 rendering한다면 type error가 발생하니
+          // 반드시 optional chaining을 통해 해당 데이터가 있는 경우에만 rendering, re-rendering되도록 구현해야 한다.
+        }
+        <Title>{loading ? 'Loading...' : data?.movie?.title}</Title>
+        <Subtitle>
+          {data?.movie?.language} · {data?.movie?.rating}
+        </Subtitle>
+        <Description>{data?.movie?.description_intro}</Description>
       </Column>
-      {data && data.movie && (
-        <Poster bg={data.movie.medium_cover_image}></Poster>
-      )}
+      <Poster bg={data?.movie?.medium_cover_image}></Poster>
     </Container>
   )
 }

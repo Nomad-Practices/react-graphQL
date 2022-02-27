@@ -65,7 +65,7 @@ function Home() {
         <Subtitle>GraphQL amazing</Subtitle>
       </Header>
       {loading && <Loading>Loading</Loading>}
-      {data && data.movies && (
+      {data?.movies && (
         <Movies>
           {data.movies.map((m) => (
             <Movie key={m.id} id={m.id} bg={m.medium_cover_image} />
